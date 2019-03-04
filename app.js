@@ -25,7 +25,7 @@ app.use(cors({
 
 //配置mongoose
 mongoose.set('debug', true);//enable logging collection methods + arguments to the console.
-mongoose.connect('mongodb://127.0.0.1/note',{useMongoClient:true});
+mongoose.connect('mongodb://127.0.0.1/note', {useNewUrlParser: true});
 mongoose.connection.on('connected', function () {
     console.log('connect mongodb success...');
 });
@@ -48,8 +48,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/login', indexRouter);
+app.use('/user', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

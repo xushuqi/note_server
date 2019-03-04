@@ -60,3 +60,13 @@ git commit -m "first commit"
 git remote add origin https://github.com/xushuqi/note_server.git
 
 git push -u origin master //git push -f origin master //不更新直接提交
+
+# 调试
+## 安装inspect
+npm install node-inspect -g
+## 启动调试
+node --inspect app.js
+
+## 打开调试界面
+安装NIM(Node.js 调试管理工具)
+chrome浏览器地址栏输入chrome://inspect  Remote Target里找启动的服务
