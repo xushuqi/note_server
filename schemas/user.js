@@ -25,17 +25,29 @@ UserSchema.pre('save', function(next){
 	}else{
 		this.meta.updateAt = Date.now();
 	}
-	bcrypt.genSalt(ROUNDS, function(err, salt) {
-		if(err) 
-			return next(err);
-		bcrypt.hash(user.password, salt, function(err, hash) {
-			if(err) 
-				return next(err);
-			user.password = hash;
-			next();
-		})
-	})
+	var salt = bcrypt.genSalt(10);
+	var hash = bcrypt.hashSync(user.password, salt);
+	user.password = hash;
+	// bcrypt.genSalt(ROUNDS, function(err, salt) {
+	// 	if(err)
+	// 		return next(err);
+	// 	bcrypt.hash(user.password, salt, function(err, hash) {
+	// 		if(err)
+	// 			return next(err);
+	// 		user.password = hash;
+	// 		next();
+	// 	})
+	// })
 });
+/**
+ * 比较密码和数据库密码是否一致
+ * @param pwd 用户输入密码
+ * @param hash 数据库存储的密码hash值
+ * @returns {*}
+ */
+UserSchema.methods.comparePwd = function(pwd, hash) {
+	return bcrypt.compareSync(pwd, hash);
+}
 
 //查询的静态方法
 UserSchema.statics = {

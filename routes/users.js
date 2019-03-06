@@ -21,28 +21,25 @@ router.post('/signIn', function (req, res, next) {
 	User.findByName(queryObj.name, function (err, result) {
 		if(err)
 			console.log(err);
-		if(!result){
+		if(result != null){
 			var user = new User(queryObj);
-			bcrypt.genSalt(ROUNDS, function(err, salt) {
-				if(err)
-					return next(err);
-				bcrypt.hash(queryObj.password, salt, function(err, hash) {
-					if(err)
-						return next(err);
-					queryObj.password = hash;
-					next();
-				})
-			});
-			if(user.password == queryObj.password){
-				req.session._id = results._doc._id;
-				req.session.user = results._doc.name;
+			var dbUser = result._doc;
+			var isMatch = false;
+			isMatch = user.comparePwd(user.password, dbUser.password);
+			if(isMatch){
+				req.session._id = dbUser._id;
+				req.session.user = dbUser.name;
 				resp.meta.code = 'success';
 				resp.meta.msg = 'success';
+				res.send(resp);
+			}else{
+				resp.meta.code = 'error';
+				resp.meta.msg = '密码不正确';
 				res.send(resp);
 			}
 		}else{
 			resp.meta.code = 'error';
-			resp.meta.msg = '用户名或密码不正确';
+			resp.meta.msg = '用户名不存在';
 			res.send(resp);
 		}
 	})
