@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var moment = require('moment');
 //声明mongoose对象
 var NoteSchema = new mongoose.Schema({
 	userId: String,

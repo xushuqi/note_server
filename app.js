@@ -13,7 +13,7 @@ var LocalStorage = require('node-localstorage').LocalStorage;
 var localStorage = new LocalStorage('./scratch');
 mongoose.Promise = global.Promise;
 
-var indexRouter = require('./routes/index');
+var noteRouter = require('./routes/note');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -93,7 +93,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/login', indexRouter);
+app.use('/note', noteRouter);
 app.use('/user', usersRouter);
 
 // catch 404 and forward to error handler
