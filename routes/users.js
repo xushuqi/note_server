@@ -68,6 +68,7 @@ router.post('/signUp', function(req, res, next) {
 				req.session.user = results._doc.name;
 				resp.meta.code = 'success';
 				resp.meta.msg = 'success';
+				resp.result = results._doc;
 				res.send(resp);
 			});
 		}else if(results._doc.name == queryObj.name){

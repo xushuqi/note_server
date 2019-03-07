@@ -25,9 +25,10 @@ UserSchema.pre('save', function(next){
 	}else{
 		this.meta.updateAt = Date.now();
 	}
-	var salt = bcrypt.genSalt(10);
-	var hash = bcrypt.hashSync(user.password, salt);
+	var round = 10;
+	var hash = bcrypt.hashSync(user.password.toString(), round);
 	user.password = hash;
+	next();
 	// bcrypt.genSalt(ROUNDS, function(err, salt) {
 	// 	if(err)
 	// 		return next(err);

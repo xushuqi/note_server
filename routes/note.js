@@ -45,7 +45,7 @@ router.post('/admin', function(req, res, next){
             if(err){
                 console.log(err);
                 resp.meta.code = 'error';
-                resp.meta.msg = '插入数据库失败，请重试...';
+                resp.meta.msg = '新增失败，请重试...';
                 res.send(resp);
             }
             if(result != null){
@@ -59,5 +59,25 @@ router.post('/admin', function(req, res, next){
             }
         })
     }
+})
+router.post('/del', function (req, res, next) {
+    var queryObj = req.body;
+    Note.delOne(queryObj.id, function (err, result) {
+        if(err){
+            console.log(err);
+            resp.meta.code = 'error';
+            resp.meta.msg = '删除数据失败，请重试...';
+            res.send(resp);
+        }
+        if(result != null){
+            resp.meta.code = 'success';
+            resp.meta.msg = 'success';
+            res.send(resp);
+        }else{
+            resp.meta.code = 'error';
+            resp.meta.msg = '删除数据失败，请重试...';
+            res.send(resp);
+        }
+    })
 })
 module.exports = router;
