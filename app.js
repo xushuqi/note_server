@@ -54,7 +54,7 @@ app.use(logger('dev', {
 
 //配置cors
 app.use(cors({
-	origin: ['http://127.0.0.1:8080'],//运行这个域的访问
+	origin: ['http://192.168.43.19:8080'],//运行这个域的访问
 	method: ['GET', 'POST'],//只允许GET和POST请求
 	// allowedHeaders: ['Content-type', 'Authorization']//只允许带这两种请求头的链接访问
 }));

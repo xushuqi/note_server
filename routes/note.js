@@ -60,7 +60,7 @@ router.post('/admin', function(req, res, next){
         })
     }
 })
-router.post('/del', function (req, res, next) {
+router.post('/del', function(req, res, next){
     var queryObj = req.body;
     Note.delOne(queryObj.id, function (err, result) {
         if(err){
@@ -80,4 +80,5 @@ router.post('/del', function (req, res, next) {
         }
     })
 })
+
 module.exports = router;
