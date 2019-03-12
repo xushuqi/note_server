@@ -3,6 +3,7 @@ var moment = require('moment');
 //声明mongoose对象
 var NoteSchema = new mongoose.Schema({
 	userId: String,
+	userName:String,
 	title: String,
 	content: String,
 	meta: {
