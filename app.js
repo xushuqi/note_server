@@ -15,6 +15,7 @@ mongoose.Promise = global.Promise;
 
 var noteRouter = require('./routes/note');
 var usersRouter = require('./routes/users');
+var remindRouter = require('./routes/remind');
 
 var app = express();
 
@@ -95,6 +96,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/note', noteRouter);
 app.use('/user', usersRouter);
+app.use('/remind', remindRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

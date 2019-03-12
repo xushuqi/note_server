@@ -5,6 +5,7 @@ const ROUNDS = 10;//the number of rounds to process the data for.
 var UserSchema = new mongoose.Schema({
 	name: String,
 	password: String,
+	phone: String,
 	meta: {
 		createAt: {
 			type: Date,
