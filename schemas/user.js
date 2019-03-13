@@ -26,9 +26,11 @@ UserSchema.pre('save', function(next){
 	}else{
 		this.meta.updateAt = Date.now();
 	}
-	var round = 10;
-	var hash = bcrypt.hashSync(user.password.toString(), round);
-	user.password = hash;
+	if(user.password !== ''){
+		var round = 10;
+		var hash = bcrypt.hashSync(user.password.toString(), round);
+		user.password = hash;
+	}
 	next();
 	// bcrypt.genSalt(ROUNDS, function(err, salt) {
 	// 	if(err)
@@ -72,6 +74,16 @@ UserSchema.statics = {
 	save: function(cb) {//新增用户
 		return this
 			.save(obj)
+			.exec(cb)
+	},
+	update: function (id, obj, options, cb) {
+		if(obj.password !== ''){
+			var round = 10;
+			var hash = bcrypt.hashSync(obj.password.toString(), round);
+			obj.password = hash;
+		}
+		return this
+			.findOneAndUpdate(id, obj, options)
 			.exec(cb)
 	}
 }

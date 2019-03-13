@@ -78,4 +78,54 @@ router.post('/signUp', function(req, res, next) {
 		}
 	});
 })
+/**
+ * 查询用户信息
+ */
+router.post('/info', function (req, res, next) {
+	var queryObj = req.body;
+	User.findById(queryObj.id, function (err, results) {
+		if(err)
+			console.log(err);
+		if(results !== null){
+			resp.meta.code = 'success';
+			resp.meta.msg = 'success';
+			resp.result = results;
+			res.send(resp);
+		}else{
+			resp.meta.code = 'error';
+			resp.meta.msg = '查询用户信息失败';
+			res.send(resp);
+		}
+	});
+});
+/**
+ * 保存用户信息
+ * @type {Router|router}
+ */
+router.post('/update', function (req, res, next) {
+	var queryObj = req.body;
+	var obj = {
+		phone: queryObj.phone
+	};
+	if(queryObj.password.trim() !== '')
+		obj.password = queryObj.password
+	var options = {
+		new: true,
+		upsert: true
+	};
+	User.update(queryObj.id, obj, options, function (err, results) {
+		if (err)
+			console.log(err)
+		if (results !== null) {
+			resp.meta.code = 'success'
+			resp.meta.msg = 'success'
+			resp.result = results
+			res.send(resp)
+		} else {
+			resp.meta.code = 'error'
+			resp.meta.msg = '保存用户信息失败，请重试...'
+			res.send(resp)
+		}
+	});
+})
 module.exports = router;
