@@ -109,10 +109,7 @@ router.post('/update', function (req, res, next) {
 	};
 	if(queryObj.password.trim() !== '')
 		obj.password = queryObj.password
-	var options = {
-		new: true,
-		upsert: true
-	};
+
 	User.update(queryObj.id, obj, options, function (err, results) {
 		if (err)
 			console.log(err)

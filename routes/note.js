@@ -5,7 +5,23 @@ var router = express.Router();
 
 var Note = require('../models/note');//导入模型数据模块
 var resp = require('../user_modules/response');//公共返回对象
-
+router.post('/findById', function (req, res, next) {
+    var queryObj = req.body;
+    Note.findById(queryObj.id, function (err, results) {
+        if(err)
+            console.log(err)
+        if(results !== null){
+            resp.meta.code = 'success'
+            resp.meta.msg = 'success'
+            resp.result = results
+            res.send(resp)
+        }else{
+            resp.meta.code = 'error'
+            resp.meta.msg = '查询信息失败'
+            res.send(resp)
+        }
+    })
+});
 /* 查询列表. */
 router.post('/list', function(req, res, next) {
     var queryObj = req.body;
@@ -30,8 +46,8 @@ router.post('/list', function(req, res, next) {
 router.post('/admin', function(req, res, next){
     var queryObj = req.body;
     var note = new Note(queryObj);
-    if(queryObj.id){//更新
-        Note.update(queryObj.id, queryObj, function (err, result) {
+    if(queryObj._id){//更新
+        Note.update(queryObj._id, queryObj, function (err, result) {
             if(err){
                 console.log(err);
                 resp.meta.code = 'error';

@@ -76,12 +76,16 @@ UserSchema.statics = {
 			.save(obj)
 			.exec(cb)
 	},
-	update: function (id, obj, options, cb) {
+	update: function (id, obj, cb) {
 		if(obj.password !== ''){
 			var round = 10;
 			var hash = bcrypt.hashSync(obj.password.toString(), round);
 			obj.password = hash;
 		}
+		var options = {
+			new: true,
+			upsert: true
+		};
 		return this
 			.findOneAndUpdate(id, obj, options)
 			.exec(cb)

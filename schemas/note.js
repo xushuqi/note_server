@@ -6,28 +6,26 @@ var NoteSchema = new mongoose.Schema({
 	userName:String,
 	title: String,
 	content: String,
-	meta: {
-		createAt: {
-			type: String,
-			default: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString()
-		},
-		updateAt: {
-			type: String,
-			default:  moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString()
-		},
-		remindTime: {
-			type: String,
-			default:  moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString()
-		}
+	createAt: {
+		type: String,
+		default: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString()
+	},
+	updateAt: {
+		type: String,
+		default:  moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString()
+	},
+	remindTime: {
+		type: String,
+		default:  moment(Date.now()).format('YYYY-MM-DD HH:mm').toString()
 	}
 });
 
 //每次执行都会调用，时间更新操作
 NoteSchema.pre(['save', 'update'], function(next){
 	if(this.isNew) {
-		this._doc.meta.createAt = this.meta.updateAt = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString();
+		this._doc.createAt = this.updateAt = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString();
 	}else{
-		this._doc.meta.updateAt =  moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString();
+		this._doc.updateAt =  moment(Date.now()).format('YYYY-MM-DD HH:mm:ss').toString();
 	}
 	
 	next();
@@ -63,8 +61,12 @@ NoteSchema.statics = {
 			.exec(cb)
 	},
 	update: function(id, obj, cb) {
+		var options = {
+			new: true,
+			upsert: true
+		};
 		return this
-			.findByIdAndUpdate(id, obj, {new: true})
+			.findByIdAndUpdate(id, obj, options)
 			.exec(cb)
 	}
 }
