@@ -107,10 +107,10 @@ router.post('/update', function (req, res, next) {
 	var obj = {
 		phone: queryObj.phone
 	};
-	if(queryObj.password.trim() !== '')
+	if(queryObj.password !== '' && queryObj.password !== undefined)
 		obj.password = queryObj.password
 
-	User.update(queryObj.id, obj, options, function (err, results) {
+	User.update(queryObj.id, obj, function (err, results) {
 		if (err)
 			console.log(err)
 		if (results !== null) {

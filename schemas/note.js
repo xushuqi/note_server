@@ -4,6 +4,7 @@ var moment = require('moment');
 var NoteSchema = new mongoose.Schema({
 	userId: String,
 	userName:String,
+	phone: String,
 	title: String,
 	content: String,
 	createAt: {
@@ -36,7 +37,6 @@ NoteSchema.statics = {
 	fetch: function(cb) {//查询所有数据
 		return this
 			.find({})
-			.sort({'meta.updateAt': '-1'})//排序
 			.exec(cb)//回调
 	},
 	findById: function(id, cb) {//根据id查询单条数据

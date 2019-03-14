@@ -77,7 +77,7 @@ UserSchema.statics = {
 			.exec(cb)
 	},
 	update: function (id, obj, cb) {
-		if(obj.password !== ''){
+		if(obj.password !== '' && obj.password !== undefined){
 			var round = 10;
 			var hash = bcrypt.hashSync(obj.password.toString(), round);
 			obj.password = hash;

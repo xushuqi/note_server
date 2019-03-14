@@ -1,4 +1,6 @@
 var express = require('express');
+var schedule = require('node-schedule');
+var moment = require('moment');
 const json2csv = require('json2csv').parse;
 const fs = require('fs');
 var router = express.Router();
@@ -127,6 +129,30 @@ router.post('/export', async function(req, res) {
             console.error(err);
         console.log('下载文件完成...')
     })
+});
+router.post('/remind', function (req, res) {
+    var queryObj = req.body;
+    var obj = {};
+    obj.noteId = queryObj._id;
+    obj.userId = queryObj.userId;
+    obj.userName = queryObj.userName;
+    obj.phone = queryObj.phone;
+    obj.content = queryObj.content;
+    obj.remindTime = queryObj.remindTime;
+    var dateTime = new Date(obj.remindTime);
+    var year = dateTime.getFullYear();
+    var month = dateTime.getMonth();
+    var day = dateTime.getDate();
+    var hour = dateTime.getHours();
+    var minute = dateTime.getMinutes();
+    var date = new Date(year, month, day, hour, minute, 0, 0);
+    console.log(moment(date).format('YYYY-MM-DD hh:mm'));
+    var dayJob = schedule.scheduleJob(date, function(){//每天0点0分触发 0 0 0 * * ? *
+        console.log('remind of: ' + obj.content + ', ' + obj.remindTime)
+    });
+    resp.meta.code = 'success';
+    resp.meta.msg = '操作执行成功';
+    res.send(resp);
 })
 
 module.exports = router;
