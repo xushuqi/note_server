@@ -5,6 +5,9 @@ const json2csv = require('json2csv').parse;
 const fs = require('fs');
 var router = express.Router();
 
+var request = require('request');
+var querystring = require('querystring');
+
 var Note = require('../models/note');//导入模型数据模块
 var resp = require('../user_modules/response');//公共返回对象
 router.post('/findById', function (req, res, next) {
@@ -148,7 +151,25 @@ router.post('/remind', function (req, res) {
     var date = new Date(year, month, day, hour, minute, 0, 0);
     console.log(moment(date).format('YYYY-MM-DD hh:mm'));
     var dayJob = schedule.scheduleJob(date, function(){//每天0点0分触发 0 0 0 * * ? *
-        console.log('remind of: ' + obj.content + ', ' + obj.remindTime)
+        //调用短信接口
+        var queryData = querystring.stringify({
+            'mobile': obj.phone,  // 接受短信的用户手机号码
+            'tpl_id': '143898',  // 您申请的短信模板ID，根据实际情况修改
+            'tpl_value': '',//'#code#=1235231',  // 您设置的模板变量，根据实际情况修改
+            'key': '25b7f126eb03f846884ea1b147de251f',  // 应用APPKEY(应用详细页查询)
+        });
+        var queryUrl = 'http://v.juhe.cn/sms/send?'+queryData;
+        request(queryUrl, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log(body) // 打印接口返回内容
+
+                var jsonObj = JSON.parse(body); // 解析接口返回的JSON内容
+                console.log(jsonObj)
+            } else {
+                console.log('请求异常');
+            }
+        });
+        console.log('sended msg at ' + obj.remindTime);
     });
     resp.meta.code = 'success';
     resp.meta.msg = '操作执行成功';
