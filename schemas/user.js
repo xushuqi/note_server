@@ -89,6 +89,11 @@ UserSchema.statics = {
 		return this
 			.findOneAndUpdate(id, obj, options)
 			.exec(cb)
+	},
+	delOne: function (id, cb) {
+		return this
+			.deleteOne({_id: id})
+			.exec(cb)
 	}
 }
 

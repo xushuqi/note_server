@@ -18,6 +18,10 @@ var NoteSchema = new mongoose.Schema({
 	remindTime: {
 		type: String,
 		default:  moment(Date.now()).format('YYYY-MM-DD HH:mm').toString()
+	},
+	showRemind: {
+		type: Boolean,
+		default: false
 	}
 });
 
@@ -67,6 +71,11 @@ NoteSchema.statics = {
 		};
 		return this
 			.findByIdAndUpdate(id, obj, options)
+			.exec(cb)
+	},
+	deleteMany: function (userName, cb) {
+		return this
+			.deleteMany({userName: userName})
 			.exec(cb)
 	}
 }

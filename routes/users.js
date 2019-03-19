@@ -5,6 +5,7 @@ var localStorage = new LocalStorage('./scratch');
 
 var router = express.Router();
 var User = require('../models/user');//导入模型数据模块
+var Note = require('../models/note');//导入note模型数据模块
 var resp = require('../user_modules/response');//公共返回对象
 
 /* GET users listing. */
@@ -73,7 +74,7 @@ router.post('/signUp', function(req, res, next) {
 			});
 		}else if(results._doc.name == queryObj.name){
 			resp.meta.code = 'error';
-			resp.meta.msg = '用户名已被使用';
+			resp.meta.msg = '该用户名已存在，请使用其他用户名';
 			res.send(resp);
 		}
 	});
@@ -124,5 +125,25 @@ router.post('/update', function (req, res, next) {
 			res.send(resp)
 		}
 	});
-})
+});
+router.post('/signOut', function (req, res, next) {
+	var queryObj = req.body;
+	User.delOne(queryObj.id, function (err, result) {
+		if(err){
+			console.log(err);
+			resp.meta.code = 'error';
+			resp.meta.msg = '删除数据失败，请重试...';
+			res.send(resp);
+		}
+		if(result != null){
+			resp.meta.code = 'success';
+			resp.meta.msg = 'success';
+			res.send(resp);
+		}else{
+			resp.meta.code = 'error';
+			resp.meta.msg = '删除数据失败，请重试...';
+			res.send(resp);
+		}
+	})
+});
 module.exports = router;
