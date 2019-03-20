@@ -48,9 +48,11 @@ NoteSchema.statics = {
 			.findOne({_id: id})
 			.exec(cb)
 	},
-	findByUserId: function(id, cb) {//根据id查询单条数据
+	findByUserId: function(id, startLine, cb) {//根据id查询单条数据
 		return this
 			.find({userId: id})
+            .skip(Number(startLine))//start line
+            .limit(10)//page size
 			.sort({'meta.createAt': '-1'})
 			.exec(cb)
 	},

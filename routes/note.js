@@ -31,7 +31,8 @@ router.post('/findById', function (req, res, next) {
 router.post('/list', function(req, res, next) {
     var queryObj = req.body;
     var userId = queryObj._id;
-    Note.findByUserId(userId, function (err, result) {
+    var startLine = queryObj.startLine;
+    Note.findByUserId(userId, startLine, function (err, result) {
         if(err)
             console.log(err);
         if(result != null){
