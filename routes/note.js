@@ -172,9 +172,30 @@ router.post('/remind', function (req, res) {
         });
         console.log('sended msg at ' + obj.remindTime);
     });
-    resp.meta.code = 'success';
-    resp.meta.msg = '操作执行成功';
-    res.send(resp);
+    Note.update(obj.noteId, {showRemind: false}, function (err, results) {
+        if(err){
+            console.log(err);
+        }
+        if(results != null){
+            Note.findByUserId(results._doc.userId, 0, function (err, result) {
+                if(err)
+                    console.log(err);
+                if(result != null){
+                    resp.meta.code = 'success';
+                    resp.meta.msg = 'success';
+                    resp.result = result;
+                    res.send(resp);
+                }else{
+                    resp.meta.code = 'success';
+                    resp.meta.msg = 'success';
+                    resp.result = [];
+                    res.send(resp);
+                }
+            });
+        }else{
+           console.log('update showRemind failed...')
+        }
+    });
 })
 
 module.exports = router;
